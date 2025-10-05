@@ -12,7 +12,7 @@ include 'includes/header.php';
 ?>
 
 <div class="container my-5">
-  <h2 class="mb-4">Your Cart</h2>
+  <h2 class="mb-4">Your Cart update code</h2>
 
   <?php if (empty($items)): ?>
     <div class="alert alert-info">Your cart is empty.</div>
