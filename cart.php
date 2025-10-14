@@ -15,8 +15,58 @@ include 'includes/header.php';
   <h2 class="mb-4">Your Cart update code</h2>
 
   <?php if (empty($items)): ?>
-    <div class="alert alert-info">Your cart is empty.</div>
-  <?php else: ?>
+  <style>
+    .empty-cart {
+      text-align: center;
+      padding: 100px 20px;
+      background: linear-gradient(135deg, #eef2ff, #f9fafb);
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    .empty-cart img {
+      width: 220px;
+      opacity: 0.9;
+      margin-bottom: 25px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
+    }
+    .empty-cart h3 {
+      font-weight: 700;
+      color: #1e1e2f;
+    }
+    .empty-cart p {
+      color: #555;
+      font-size: 1.05rem;
+      margin-bottom: 30px;
+    }
+    .empty-cart .btn {
+      border-radius: 50px;
+      font-weight: 600;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(99,102,241,0.3);
+    }
+    .empty-cart .btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(99,102,241,0.35);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
+  <div class="empty-cart my-5">
+    <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Empty Cart">
+    <h3>Your Cart is Empty 🛒</h3>
+    <p>Looks like you haven’t added anything yet.<br>Explore our products and start shopping!</p>
+    <a href="index.php" class="btn">Continue Shopping</a>
+  </div>
+<?php else: ?>
+
     <div class="table-responsive">
       <table class="table table-bordered align-middle text-center">
         <thead class="table-light">
