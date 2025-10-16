@@ -231,14 +231,175 @@ body {
 </style>
 
 
-<!-- 💫 HERO SECTION -->
-<section class="hero">
-  <div class="container">
-    <h1>Welcome to ShopEasy 🛍️</h1>
-    <p>Your one-stop shop for premium products and unbeatable deals.</p>
-    <a href="#products" class="btn btn-light mt-4 px-4 py-2 rounded-pill fw-semibold">Shop Now</a>
+<!-- Hero Section -->
+<section class="hero position-relative overflow-hidden">
+  <!-- Animated Particles Background -->
+  <canvas id="heroParticles" class="position-absolute top-0 start-0 w-100 h-100"></canvas>
+
+  <div class="container py-5 position-relative" style="z-index:2">
+    <div class="row align-items-center">
+
+      <!-- Left: Title, Subtitle, Features, CTA -->
+      <div class="col-lg-6 text-center text-lg-start mb-5 mb-lg-0 hero-text">
+        <h1 class="fw-bold display-4 text-primary mb-3">Welcome to Electronic_Shop ⚡</h1>
+        <p class="lead text-muted mb-4">Discover the latest gadgets, premium electronics, and unbeatable deals all in one place.</p>
+
+        <!-- Features -->
+        <div class="d-flex flex-column flex-sm-row gap-3 mb-4 justify-content-center justify-content-lg-start">
+          <div class="feature bg-light p-3 rounded-3 shadow-sm text-center">
+            <i class="bi bi-truck fs-3 text-primary mb-2"></i>
+            <p class="mb-0 small">Fast Delivery</p>
+          </div>
+          <div class="feature bg-light p-3 rounded-3 shadow-sm text-center">
+            <i class="bi bi-shield-check fs-3 text-primary mb-2"></i>
+            <p class="mb-0 small">Secure Payments</p>
+          </div>
+          <div class="feature bg-light p-3 rounded-3 shadow-sm text-center">
+            <i class="bi bi-star fs-3 text-primary mb-2"></i>
+            <p class="mb-0 small">Top Quality</p>
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <a href="#products" class="btn btn-primary btn-lg rounded-pill hero-btn">Shop Now</a>
+      </div>
+
+      <!-- Right: Swiper Slider (No Add to Cart) -->
+      <div class="col-lg-6">
+        <div class="swiper heroSwiper shadow-lg rounded-4">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide hero-slide-container">
+              <img src="https://img.pacifiko.com/PROD/resize/1/500x500/B0DW29H85Z.jpg" alt="Product 1" class="w-100 rounded-4">
+              <div class="slide-info">
+                <h5 class="text-dark">ASUS ROG Strix SCAR 18</h5>
+                <p>$3999.99</p>
+              </div>
+            </div>
+
+            <div class="swiper-slide hero-slide-container">
+              <img src="https://easypc.com.ph/cdn/shop/files/YGT_V300_MAtx_Tempered_Glass_Gaming_PC_Case_Black-b_2048x.png?v=1701411825" alt="Product 2" class="w-100 rounded-4">
+              <div class="slide-info">
+                <h5 class="text-dark">Gaming PC Case</h5>
+                <p>$349.99</p>
+              </div>
+            </div>
+
+            <div class="swiper-slide hero-slide-container">
+              <img src="https://xiaomistoreph.com/cdn/shop/files/Xiaomi_CurvedGamingMonitorG34WQI_WBG_1_1024x1024.jpg?v=1749552823" alt="Product 3" class="w-100 rounded-4">
+              <div class="slide-info">
+                <h5 class="text-dark">Curved Gaming Monitor</h5>
+                <p>$499.99</p>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination mt-3"></div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script>
+const heroSwiper = new Swiper('.heroSwiper', {
+  loop: true,
+  autoplay: { delay: 3000, disableOnInteraction: false },
+  pagination: { el: '.swiper-pagination', clickable: true },
+  effect: 'coverflow',
+  coverflowEffect: { rotate: 20, slideShadows: true },
+  slidesPerView: 1,
+  spaceBetween: 20,
+});
+</script>
+
+<!-- Particles JS -->
+<script>
+const canvas = document.getElementById('heroParticles');
+const ctx = canvas.getContext('2d');
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+const particles = [];
+const numParticles = 50;
+
+for(let i=0; i<numParticles; i++){
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random()*3+1,
+    dx: (Math.random()-0.5)*0.5,
+    dy: (Math.random()-0.5)*0.5
+  });
+}
+
+function animateParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle = "rgba(13,110,253,0.2)";
+    ctx.fill();
+    p.x += p.dx;
+    p.y += p.dy;
+    if(p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if(p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+window.addEventListener('resize', () => {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+});
+</script>
+
+<style>
+.hero {
+  min-height: 80vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e0f2ff, #f0f9ff);
+  display: flex; align-items: center;
+}
+.hero-text { animation: slideUp 1s ease forwards; z-index:2; }
+.hero h1 { font-size:3rem; color:#0d6efd; }
+.hero p { font-size:1.2rem; color:#555; margin-bottom:2rem; }
+.hero-btn { transition: all 0.3s ease; }
+.hero-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(13,110,253,0.3); }
+
+/* Features */
+.feature { min-width:100px; transition: all 0.3s ease; }
+.feature:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+/* Swiper Slide Info Overlay (No Button) */
+.hero-slide-container { position:relative; overflow:hidden; }
+.slide-info {
+  position:absolute; bottom:10px; left:10px;
+  background:rgba(255,255,255,0.85); padding:10px 15px; border-radius:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1); opacity:0; transform:translateY(20px);
+  transition: all 0.3s ease;
+}
+.hero-slide-container:hover .slide-info { opacity:1; transform:translateY(0); }
+.slide-info h5 { margin:0; font-size:1rem; font-weight:600; }
+.slide-info p { margin:0.2rem 0; font-size:0.9rem; }
+
+/* Animations */
+@keyframes slideUp { 0%{opacity:0;transform:translateY(30px);}100%{opacity:1;transform:translateY(0);} }
+
+/* Responsive */
+@media(max-width:992px){
+.hero h1{font-size:2.2rem;}
+.hero p{font-size:1rem;}
+.hero-slide-container img{height:250px; object-fit:cover;}
+.feature{min-width:auto; flex:1;}
+}
+</style>
+
 
 <?php
 require_once 'init.php';
@@ -413,22 +574,122 @@ if (is_logged_in()) {
 }
 </style>
 
-<!-- 💥 PROMO CTA -->
-<section class="cta container">
-  <h3>Get 20% Off Your First Order!</h3>
-  <p>Sign up now and enjoy exclusive deals and new arrivals every week.</p>
-  <a href="register.php" class="btn mt-3">Join Now</a>
+<!-- 💥 PREMIUM PROMO CTA -->
+<section class="cta-premium py-5 position-relative overflow-hidden text-center">
+  <!-- Background Gradient Animation -->
+  <div class="cta-bg position-absolute top-0 start-0 w-100 h-100"></div>
+
+  <!-- Floating particles/icons -->
+  <div class="cta-particles">
+    <i class="bi bi-lightning-charge-fill particle"></i>
+    <i class="bi bi-star-fill particle"></i>
+    <i class="bi bi-cpu-fill particle"></i>
+    <i class="bi bi-headphones particle"></i>
+    <i class="bi bi-tv-fill particle"></i>
+  </div>
+
+  <div class="container position-relative" style="z-index:2">
+    <h3 class="fw-bold display-5 mb-3 shimmer-text">🎉 Get <span>20% Off</span> Your First Order!</h3>
+    <p class="lead text-light mb-4">Sign up now and enjoy exclusive deals and new arrivals every week.</p>
+    <a href="register.php" class="btn btn-light btn-lg rounded-pill cta-btn">Join Now</a>
+  </div>
 </section>
 
-<!-- 💌 NEWSLETTER -->
-<section class="newsletter container">
-  <h4 class="fw-bold mb-3">Stay Updated!</h4>
-  <p>Subscribe to our newsletter to receive latest offers and product updates.</p>
-  <form class="d-flex justify-content-center mt-3">
-    <input type="email" class="form-control me-2" placeholder="Enter your email">
-    <button class="btn btn-primary rounded-pill px-4">Subscribe</button>
-  </form>
-</section>
+<style>
+/* CTA Premium Section */
+.cta-premium {
+  border-radius: 2rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa, #818cf8);
+  background-size: 400% 400%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+  animation: gradientBG 15s ease infinite;
+}
+
+.cta-bg {
+  position: absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  filter: blur(80px);
+  z-index:1;
+  opacity:0.5;
+}
+
+/* Gradient Animation */
+@keyframes gradientBG {
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* Shimmer Text */
+.shimmer-text span {
+  background: linear-gradient(90deg, #fff, #ffd700, #fff);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2.5s infinite;
+}
+
+@keyframes shimmer {
+  0%{background-position:-200% 0;}
+  100%{background-position:200% 0;}
+}
+
+/* Button */
+.cta-btn {
+  font-weight: 700;
+  padding: 14px 40px;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+.cta-btn:hover {
+  transform: translateY(-5px) scale(1.08);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+}
+
+/* Floating Particles */
+.cta-particles .particle {
+  position: absolute;
+  font-size: 1.5rem;
+  color: rgba(255,255,255,0.6);
+  animation: float 6s linear infinite;
+}
+
+.cta-particles .particle:nth-child(1){ top:10%; left:20%; animation-delay: 0s; }
+.cta-particles .particle:nth-child(2){ top:30%; left:80%; animation-delay: 1.2s; }
+.cta-particles .particle:nth-child(3){ top:60%; left:15%; animation-delay: 2.5s; }
+.cta-particles .particle:nth-child(4){ top:50%; left:60%; animation-delay: 3.7s; }
+.cta-particles .particle:nth-child(5){ top:80%; left:40%; animation-delay: 5s; }
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); opacity:0.6; }
+  50% { transform: translateY(-20px) rotate(180deg); opacity:1; }
+  100% { transform: translateY(0) rotate(360deg); opacity:0.6; }
+}
+
+/* Scroll Entrance Animation */
+.cta-premium h3, .cta-premium p, .cta-btn {
+  opacity:0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s forwards;
+}
+.cta-premium h3 { animation-delay: 0.3s; }
+.cta-premium p { animation-delay: 0.6s; }
+.cta-premium .cta-btn { animation-delay: 0.9s; }
+
+@keyframes fadeInUp {
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .cta-premium h3{ font-size:2rem; }
+  .cta-premium p{ font-size:1rem; }
+}
+</style>
+
 
 <?php
 // SweetAlert popups
@@ -450,3 +711,5 @@ if (isset($_SESSION['wishlist_error'])) {
 
 include 'includes/footer.php';
 ?>
+
+

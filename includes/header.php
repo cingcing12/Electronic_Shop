@@ -213,10 +213,21 @@
   <!-- Modern Navbar with Offcanvas -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-gradient fixed-top shadow-sm">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="index.php">My Shop</a>
+    <a class="navbar-brand fw-bold" href="index.php">Electronic_Shop</a>
+
+
+<div>
+  <!-- Mobile Search Icon -->
+<button class="btn btn-outline-light d-lg-none ms-2" type="button" data-bs-toggle="modal" data-bs-target="#mobileSearchModal">
+  <i class="fas fa-search"></i>
+</button>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
+</div>
+
+
 
     <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
       <div class="offcanvas-header border-bottom border-secondary">
@@ -263,8 +274,53 @@
         </ul>
       </div>
     </div>
+
+        <!-- Responsive Search Input -->
+<div class="position-relative ms-auto me-3 d-lg-block d-none" style="max-width:350px; width:100%;">
+  <input id="navbarSearch" type="text" class="form-control rounded-pill ps-4 pe-4" placeholder="Search products..." autocomplete="off">
+  <div id="searchResults" class="position-absolute w-100 bg-white shadow rounded overflow-auto" style="max-height:300px; display:none; z-index:1050;"></div>
+</div>
   </div>
 </nav>
+
+<!-- Mobile Search Modal -->
+<div class="modal fade" id="mobileSearchModal" tabindex="-1" aria-labelledby="mobileSearchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="mobileSearchModalLabel">Search Products</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input id="mobileNavbarSearch" type="text" class="form-control rounded-pill mb-3" placeholder="Search products..." autocomplete="off">
+        <div id="mobileSearchResults" class="overflow-auto" style="max-height:300px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+#mobileSearchResults div {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid #e0e0e0;
+}
+#mobileSearchResults div:hover {
+  background: linear-gradient(90deg, #ff6f61, #ff9472);
+  color: #fff;
+}
+#mobileSearchResults img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+</style>
+
 
 <style>
 /* Gradient Navbar */
@@ -327,6 +383,146 @@
 }
 </style>
 
+<style>
+/* Search Input Styling */
+#navbarSearch {
+  padding: 0.5rem 1rem;
+  border: 2px solid #ffebcd;
+  transition: all 0.3s ease;
+}
+
+#navbarSearch:focus {
+  outline: none;
+  box-shadow: 0 0 12px rgba(255,111,97,0.5);
+  border-color: #ff6f61;
+}
+
+/* Dropdown Results */
+#searchResults div {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#searchResults div:hover {
+  background: linear-gradient(90deg, #ff6f61, #ff9472);
+  color: #fff;
+}
+
+#searchResults img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+/* Responsive adjustments */
+@media(max-width:767px){
+  #navbarSearch {
+    max-width:100%;
+    margin-bottom:10px;
+  }
+  #searchResults {
+    max-height:200px;
+  }
+}
+</style>
+
+
 
   <!-- Page content starts here -->
-  <div class="container">
+  <!-- <div class="container"> -->
+
+  <script>
+const searchInput = document.getElementById('navbarSearch');
+const resultsBox = document.getElementById('searchResults');
+
+let timeout = null;
+
+searchInput.addEventListener('input', function() {
+  clearTimeout(timeout);
+  const query = this.value.trim();
+
+  if(query.length < 2){
+    resultsBox.style.display = 'none';
+    return;
+  }
+
+  timeout = setTimeout(() => {
+    fetch(`search_ajax.php?q=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        resultsBox.innerHTML = '';
+        if(data.length > 0){
+          data.forEach(product => {
+            const div = document.createElement('div');
+            div.classList.add('d-flex','align-items-center','p-2','border-bottom','hover-bg-light');
+            div.style.cursor = 'pointer';
+            div.innerHTML = `
+              <img src="${product.image}" alt="${product.name}" style="width:50px;height:50px;object-fit:cover;border-radius:5px;margin-right:10px;">
+              <span>${product.name}</span>
+            `;
+            div.addEventListener('click', () => {
+              window.location.href = `product.php?id=${product.id}`;
+            });
+            resultsBox.appendChild(div);
+          });
+        } else {
+          resultsBox.innerHTML = '<div class="p-2 text-muted">No products found</div>';
+        }
+        resultsBox.style.display = 'block';
+      });
+  }, 300);
+});
+
+// Hide results when clicking outside
+document.addEventListener('click', (e)=>{
+  if(!resultsBox.contains(e.target) && e.target !== searchInput){
+    resultsBox.style.display = 'none';
+  }
+});
+</script>
+
+
+<script>
+const mobileSearchInput = document.getElementById('mobileNavbarSearch');
+const mobileResultsBox = document.getElementById('mobileSearchResults');
+
+let mobileTimeout = null;
+
+mobileSearchInput.addEventListener('input', function() {
+  clearTimeout(mobileTimeout);
+  const query = this.value.trim();
+
+  if(query.length < 2){
+    mobileResultsBox.innerHTML = '';
+    return;
+  }
+
+  mobileTimeout = setTimeout(() => {
+    fetch(`search_ajax.php?q=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        mobileResultsBox.innerHTML = '';
+        if(data.length > 0){
+          data.forEach(product => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+              <img src="${product.image}" alt="${product.name}">
+              <span>${product.name}</span>
+            `;
+            div.addEventListener('click', () => {
+              window.location.href = `product.php?id=${product.id}`;
+            });
+            mobileResultsBox.appendChild(div);
+          });
+        } else {
+          mobileResultsBox.innerHTML = '<div class="text-muted p-2">No products found</div>';
+        }
+      });
+  }, 300);
+});
+</script>
