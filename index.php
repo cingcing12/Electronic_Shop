@@ -473,7 +473,7 @@ if (is_logged_in()) {
                 </form>
               <?php endif; ?>
           <?php else: ?>
-            <a href="login.php" class="wishlist-btn" title="Login to add wishlist">🤍</a>
+            <a href="login.php" class="wishlist-btn nav-link" title="Login to add wishlist">🤍</a>
           <?php endif; ?>
 
           <div class="card-body">

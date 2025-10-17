@@ -73,6 +73,14 @@ CREATE TABLE order_items (
 );
 
 
+-- Create categories
+INSERT INTO categories (id, name) VALUES
+(1, 'Electronics'),
+(2, 'Fashion'),
+(3, 'Furniture'),
+(4, 'Gaming');
+
+-- Then insert products
 INSERT INTO products (category_id, name, description, price, image) VALUES
 (1, 'iPhone 15', 'Latest Apple iPhone 15 with amazing features', 999.99, 'https://www.applex.com.bd/cdn/shop/files/iPhone-15-Plus-_3_-8671.jpg?v=1738426440&width=1445'),
 (1, 'Samsung Galaxy S23', 'Samsung flagship phone with high performance', 899.99, 'https://m.media-amazon.com/images/I/61yUiD1CVML._UF1000,1000_QL80_.jpg'),
@@ -81,4 +89,16 @@ INSERT INTO products (category_id, name, description, price, image) VALUES
 (3, 'Sofa Set', 'Modern 3-piece sofa set for living room', 550.00, 'https://craftsmill.in/cdn/shop/files/sofas-accent-chairs-cider-orange-soft-velvet-touch-fabric-emily-flared-arm-2-seater-sofa-60-46567514931491.jpg?v=1725047510'),
 (4, 'Gaming Chair', 'Ergonomic chair designed for gamers', 199.99, 'https://www.greensoul.online/cdn/shop/files/717896796-slide-1_f4bcd7ae-676f-4618-a81e-074a84749005_650x.jpg?v=1756711932'),
 (4, 'PlayStation 5', 'Next-gen gaming console with amazing graphics', 499.99, 'https://www.cnet.com/a/img/resize/05f4f1af2b2243d7dfb1349ab1888878fbf84ceb/hub/2022/10/24/a316fc5e-b8d6-4914-925a-a33170c9abeb/ps5.jpg?auto=webp&fit=crop&height=1200&width=1200'),
-(1, 'MacBook Pro 16"', 'Apple MacBook Pro 16-inch with M1 chip', 2499.99, 'https://www.shutterstock.com/image-photo/macbook-pro-m2-16inch-apple-600nw-2288025241.jpg');
+(1, 'MacBook Pro 16"', 'Apple MacBook Pro 16-inch with M1 chip', 2499.99, 'https://www.shutterstock.com/image-photo/macbook-pro-m2-16inch-apple-600nw-2288025241.jpg'),
+(1, 'ASUS ROG Strix SCAR 18', 'The ASUS ROG Strix SCAR 18 is a high-performance, desktop-replacement gaming laptop designed for enthusiasts who want maximum power in a portable format. It is known for its large 18-inch Mini-LED display, powerful processor and graphics options, and extensive RGB lighting.', 2999.99, 'https://img.pacifiko.com/PROD/resize/1/500x500/B0DW29H85Z.jpg'),
+(4, 'Gaming PC Case', 'A gaming PC case is a chassis that houses and protects the components of a gaming computer, such as the motherboard, CPU, and GPU. Unlike standard computer cases, gaming cases are designed with a focus on optimal airflow, robust cooling, and aesthetic customization. The size and features vary widely, accommodating different hardware configurations and personal preferences.', 349.99, 'https://easypc.com.ph/cdn/shop/files/YGT_V300_MAtx_Tempered_Glass_Gaming_PC_Case_Black-b_2048x.png?v=1701411825'),
+(1, 'Curved Gaming Monitor', 'A curved gaming monitor is a display with a gently arcing screen designed to wrap around your field of vision, creating a more immersive experience for gaming. By mimicking the natural curve of the human eye, these monitors reduce distortion and eye strain, especially on larger, ultrawide displays.', 499.99, 'https://xiaomistoreph.com/cdn/shop/files/Xiaomi_CurvedGamingMonitorG34WQI_WBG_1_1024x1024.jpg?v=1749552823');
+
+
+ALTER TABLE categories
+ADD COLUMN icon VARCHAR(100) NULL;
+
+UPDATE categories SET icon = 'bi-phone' WHERE id = 1;       -- Electronics
+UPDATE categories SET icon = 'bi-bag' WHERE id = 2;         -- Fashion
+UPDATE categories SET icon = 'bi-house' WHERE id = 3;       -- Furniture
+UPDATE categories SET icon = 'bi-controller' WHERE id = 4;  -- Gaming

@@ -23,6 +23,7 @@
 
 
 
+
   <style>
     /* Product Card Styling */
 .product-card {
@@ -524,5 +525,154 @@ mobileSearchInput.addEventListener('input', function() {
         }
       });
   }, 300);
+});
+</script>
+
+<!-- ======= ELECTRONIC_SHOP FUTURISTIC LOADER ======= -->
+<div id="pageLoader" class="loader-wrapper">
+  <div class="loader-background"></div>
+  <div class="loader-content">
+    <div class="logo-container">
+      <img src="https://cdn-icons-png.flaticon.com/512/3443/3443338.png" alt="Electronic_Shop Logo" class="loader-logo" />
+    </div>
+    <div class="loader-ring"></div>
+    <h4 class="loader-title">Electronic_Shop</h4>
+    <p class="loader-subtitle">Powering your world with innovation...</p>
+  </div>
+</div>
+
+
+<style>
+/* ====== ELECTRONIC_SHOP LOADER ====== */
+.loader-wrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #001f3f, #000);
+  overflow: hidden;
+  z-index: 9999;
+  transition: opacity 1s ease, visibility 1s ease;
+}
+
+/* Animated background energy waves */
+.loader-background::before,
+.loader-background::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: conic-gradient(
+    from 0deg,
+    #00c6ff,
+    #0072ff,
+    #0ef,
+    #00c6ff
+  );
+  animation: rotateGradient 8s linear infinite;
+  opacity: 0.4;
+  filter: blur(180px);
+}
+.loader-background::after {
+  animation-direction: reverse;
+  opacity: 0.25;
+}
+
+@keyframes rotateGradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Centered content */
+.loader-content {
+  position: relative;
+  text-align: center;
+  color: white;
+  z-index: 10;
+}
+
+.logo-container {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px;
+  box-shadow: 0 0 25px rgba(0,255,255,0.2);
+  animation: pulse 2s infinite alternate ease-in-out;
+}
+
+.loader-logo {
+  width: 60px;
+  height: 60px;
+  filter: drop-shadow(0 0 8px #0ef);
+  animation: floatLogo 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 15px rgba(0,255,255,0.2); }
+  100% { box-shadow: 0 0 35px rgba(0,255,255,0.6); }
+}
+
+@keyframes floatLogo {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Glowing rotating ring */
+.loader-ring {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  border: 3px solid transparent;
+  border-top-color: #00c6ff;
+  border-right-color: #0ef;
+  border-radius: 50%;
+  animation: spinRing 1.6s linear infinite;
+  box-shadow: 0 0 25px #00c6ff, 0 0 35px #0ef;
+}
+
+@keyframes spinRing {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Text style */
+.loader-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  margin-top: 160px;
+  text-shadow: 0 0 10px rgba(0,255,255,0.8);
+}
+
+.loader-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  color: #aeefff;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* Fade out when loaded */
+.loader-wrapper.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+</style>
+
+<script>
+window.addEventListener('load', () => {
+  const loader = document.getElementById('pageLoader');
+  loader.classList.add('hidden');
 });
 </script>

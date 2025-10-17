@@ -73,7 +73,7 @@ if (isset($_POST['add_to_wishlist']) && is_logged_in()) {
 
 <!-- 🛒 Category Products -->
 <section id="products" class="container my-5">
-  <h2 class="text-center fw-bold mb-5 "><?= htmlspecialchars($category); ?> Products</h2>
+  <h2 class="fw-bold mb-5 "><?= htmlspecialchars($category); ?> Products</h2>
 
   <?php if (count($products) > 0): ?>
     <div class="row g-4">
