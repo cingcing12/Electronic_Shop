@@ -57,12 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="text-center mb-3">
         <small class="text-muted">Don't have an account? <a href="register.php" class="text-decoration-none fw-semibold text-primary">Register here</a></small>
       </div>
-
-      <div class="social-login text-center">
-        <p class="text-muted mb-2">Or login with</p>
-        <button type="button" class="btn btn-google">Google</button>
-        <button type="button" class="btn btn-facebook">Facebook</button>
-      </div>
     </form>
   </div>
 </div>

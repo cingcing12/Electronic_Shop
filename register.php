@@ -77,11 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <small class="text-muted">Already have an account? <a href="login.php" class="text-decoration-none fw-semibold text-primary">Login here</a></small>
       </div>
 
-      <div class="social-login text-center">
-        <p class="text-muted mb-2">Or register with</p>
-        <button type="button" class="btn btn-google">Google</button>
-        <button type="button" class="btn btn-facebook">Facebook</button>
-      </div>
     </form>
   </div>
 </div>

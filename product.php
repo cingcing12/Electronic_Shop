@@ -147,7 +147,7 @@ include 'includes/header.php';
               </form>
             <?php endif; ?>
           <?php else: ?>
-            <a href="login.php" class="wishlist-btn position-absolute top-0 end-0 m-2" title="Login to add wishlist">🤍</a>
+            <a href="login.php" class="wishlist-btn position-absolute top-0 end-0 m-2 nav-link" title="Login to add wishlist">🤍</a>
           <?php endif; ?>
 
           <div class="card-body">

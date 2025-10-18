@@ -102,30 +102,30 @@ function get_wishlist_items($pdo, $user_id) {
 /**
  * Place an order (from cart) for user
  */
-function place_order($pdo, $user_id) {
-    $cartItems = get_cart_items($pdo, $user_id);
-    if (empty($cartItems)) {
-        return false;
-    }
-    // Calculate total
-    $total = 0;
-    foreach ($cartItems as $ci) {
-        $total += $ci['price'] * $ci['quantity'];
-    }
-    // Insert into orders
-    $stmt = $pdo->prepare("INSERT INTO orders (user_id, total_amount) VALUES (?, ?)");
-    $stmt->execute([$user_id, $total]);
-    $orderId = $pdo->lastInsertId();
-    // Insert each item
-    $ins = $pdo->prepare("INSERT INTO order_items (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)");
-    foreach ($cartItems as $ci) {
-        $ins->execute([$orderId, $ci['product_id'], $ci['quantity'], $ci['price']]);
-    }
-    // Clear cart
-    $del = $pdo->prepare("DELETE FROM cart_items WHERE user_id = ?");
-    $del->execute([$user_id]);
-    return $orderId;
-}
+// function place_order($pdo, $user_id) {
+//     $cartItems = get_cart_items($pdo, $user_id);
+//     if (empty($cartItems)) {
+//         return false;
+//     }
+//     // Calculate total
+//     $total = 0;
+//     foreach ($cartItems as $ci) {
+//         $total += $ci['price'] * $ci['quantity'];
+//     }
+//     // Insert into orders
+//     $stmt = $pdo->prepare("INSERT INTO orders (user_id, total_amount) VALUES (?, ?)");
+//     $stmt->execute([$user_id, $total]);
+//     $orderId = $pdo->lastInsertId();
+//     // Insert each item
+//     $ins = $pdo->prepare("INSERT INTO order_items (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)");
+//     foreach ($cartItems as $ci) {
+//         $ins->execute([$orderId, $ci['product_id'], $ci['quantity'], $ci['price']]);
+//     }
+//     // Clear cart
+//     $del = $pdo->prepare("DELETE FROM cart_items WHERE user_id = ?");
+//     $del->execute([$user_id]);
+//     return $orderId;
+// }
 
 if (!function_exists('is_logged_in')) {
     function is_logged_in() {
@@ -160,6 +160,65 @@ function remove_from_wishlist($pdo, $user_id, $product_id) {
     $stmt = $pdo->prepare("DELETE FROM wishlist_items WHERE user_id = ? AND product_id = ?");
     $stmt->execute([$user_id, $product_id]);
 }
+
+function place_order($pdo, $user_id, $payment_method, $address, $card_number = null, $card_name = null) {
+    // Fetch cart items with product prices
+    $stmt = $pdo->prepare("
+        SELECT c.quantity, p.id AS product_id, p.price 
+        FROM cart_items c 
+        JOIN products p ON c.product_id = p.id 
+        WHERE c.user_id = ?
+    ");
+    $stmt->execute([$user_id]);
+    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (empty($items)) return false;
+
+    // Calculate total
+    $total = 0;
+    foreach ($items as $item) {
+        $total += $item['quantity'] * $item['price'];
+    }
+
+    try {
+        $pdo->beginTransaction();
+
+        // Insert order with address and payment info
+        $stmtOrder = $pdo->prepare("
+            INSERT INTO orders (user_id, total_amount, status, address, payment_method, card_number, card_name) 
+            VALUES (?, ?, 'pending', ?, ?, ?, ?)
+        ");
+        $stmtOrder->execute([$user_id, $total, $address, $payment_method, $card_number, $card_name]);
+        $orderId = $pdo->lastInsertId();
+
+        // Insert order items
+        $stmtItem = $pdo->prepare("
+            INSERT INTO order_items (order_id, product_id, quantity, unit_price) 
+            VALUES (?, ?, ?, ?)
+        ");
+        foreach ($items as $item) {
+            $stmtItem->execute([$orderId, $item['product_id'], $item['quantity'], $item['price']]);
+        }
+
+        // Clear user's cart
+        $stmtClear = $pdo->prepare("DELETE FROM cart_items WHERE user_id = ?");
+        $stmtClear->execute([$user_id]);
+
+        $pdo->commit();
+        return $orderId;
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        return false;
+    }
+}
+
+function is_admin_logged_in() {
+    return isset($_SESSION['user_id']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+}
+
+
+
+
 
 
 

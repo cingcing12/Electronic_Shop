@@ -102,3 +102,13 @@ UPDATE categories SET icon = 'bi-phone' WHERE id = 1;       -- Electronics
 UPDATE categories SET icon = 'bi-bag' WHERE id = 2;         -- Fashion
 UPDATE categories SET icon = 'bi-house' WHERE id = 3;       -- Furniture
 UPDATE categories SET icon = 'bi-controller' WHERE id = 4;  -- Gaming
+
+
+ALTER TABLE orders
+ADD COLUMN address VARCHAR(255) NOT NULL AFTER total_amount,
+ADD COLUMN payment_method VARCHAR(50) NOT NULL DEFAULT 'cash',
+ADD COLUMN card_number VARCHAR(50) NULL,
+ADD COLUMN card_name VARCHAR(100) NULL;
+
+ALTER TABLE users
+ADD COLUMN role VARCHAR(50) NOT NULL DEFAULT 'user';

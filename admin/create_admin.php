@@ -3,7 +3,7 @@ require_once __DIR__ . '/../init.php'; // Adjust path since inside admin folder
 
 $username = 'adminuser';
 $email = 'admin@example.com';
-$password = 'your_admin_password'; // Change this before running!
+$password = 'admin1234@'; // Change this before running!
 
 // Check if admin user exists
 $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
