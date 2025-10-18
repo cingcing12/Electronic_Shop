@@ -5,6 +5,7 @@ if (!is_logged_in()) {
     redirect('login.php');
 }
 $user = get_user($pdo, $_SESSION['user_id']);
+$titleName = "Account";
 include 'includes/header.php';
 ?>
 
@@ -59,13 +60,19 @@ body {
     align-items: center;
     transition: all 0.3s ease;
     border-left: 5px solid transparent;
-    cursor: pointer;
 }
 .order-card:hover {
     transform: translateY(-3px);
     background: #eef2ff;
     border-left: 5px solid #007bff;
     box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+}
+.order-card.cancelled {
+    background: #f5f5f5;
+    border-left-color: #e57373;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 .order-info { font-size: 0.95rem; }
 .order-info strong { font-weight:600; color:#222; }
@@ -81,7 +88,6 @@ body {
 
 .order-icon { font-size:1.3rem; margin-right:8px; }
 
-/* Additional style for images in order modal */
 .swal2-html-container img {
     max-width: 60px;
     margin-right: 10px;
@@ -95,8 +101,6 @@ body {
     .account-details { padding:25px; }
     .order-card { flex-direction:column; align-items:flex-start; }
 }
-
-
 </style>
 
 <div class="account-container shadow-lg">
@@ -123,14 +127,21 @@ body {
                 foreach ($orders as $o):
                     $status = strtolower($o['status']);
                     $badgeClass = ($status == 'completed') ? 'completed' : (($status == 'cancelled') ? 'cancelled' : 'pending');
+                    $isClickable = ($status !== 'cancelled');
+                    $cardClass = ($status === 'cancelled') ? 'cancelled' : '';
             ?>
-            <div class="order-card" onclick="showOrderDetails(<?= $o['id']; ?>)">
-                <div class="order-info">
+            <div class="order-card <?= $cardClass; ?>" <?= $isClickable ? "onclick=\"showOrderDetails({$o['id']})\"" : "" ?> >
+                <div class="order-info" style="cursor: <?= $isClickable ? 'pointer' : 'not-allowed' ?>;">
                     <span class="order-icon">🧾</span>
                     <strong>Order #<?= $o['id']; ?></strong><br>
                     💰 <strong>$<?= number_format($o['total_amount'],2); ?></strong>
                 </div>
-                <span class="order-status <?= $badgeClass; ?>"><?= ucfirst($status); ?></span>
+                <div class="d-flex gap-2 align-items-center">
+                    <span class="order-status <?= $badgeClass; ?>"><?= ucfirst($status); ?></span>
+                    <?php if($status === 'pending'): ?>
+                        <button class="btn btn-sm btn-danger" onclick="cancelOrder(<?= $o['id']; ?>, event)">Cancel</button>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php endforeach; ?>
             <?php else: ?>
@@ -170,6 +181,35 @@ function showOrderDetails(orderId){
             });
         } else {
             Swal.fire('Error','Could not fetch order details.','error');
+        }
+    });
+}
+
+function cancelOrder(orderId, event){
+    event.stopPropagation(); // prevent opening modal
+    Swal.fire({
+        title: 'Cancel Order?',
+        text: "Are you sure you want to cancel this order?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, cancel it!',
+        cancelButtonText: 'No'
+    }).then((result)=>{
+        if(result.isConfirmed){
+            fetch('cancel_order.php', {
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({order_id:orderId})
+            }).then(res=>res.json())
+            .then(data=>{
+                if(data.success){
+                    Swal.fire('Cancelled!','Your order has been cancelled.','success').then(()=>{
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error','Could not cancel order.','error');
+                }
+            });
         }
     });
 }

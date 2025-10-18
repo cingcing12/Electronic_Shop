@@ -35,6 +35,8 @@ if (isset($_POST['add_to_wishlist'])) {
     redirect('index.php');
 }
 
+$titleName = "Home";
+
 include 'includes/header.php';
 ?>
 

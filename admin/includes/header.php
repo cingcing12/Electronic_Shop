@@ -82,14 +82,14 @@ body { font-family:'Poppins', sans-serif; margin:0; background:#f5f6fa; }
 
 <!-- Sidebar -->
 <div class="sidebar d-flex flex-column p-3 px-2" id="sidebar">
-    <h3 class="text-center text-white mb-4">Electronic_Shop</h3>
+    <h4 class="text-center text-white mb-4 fw-bold">Electronic_Shop</h4>
     <ul class="nav flex-column mb-auto">
         <li><a href="index.php" class="nav-link <?= basename($_SERVER['PHP_SELF'])=='index.php'?'active':'' ?>"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
         <li><a href="users.php" class="nav-link <?= basename($_SERVER['PHP_SELF'])=='users.php'?'active':'' ?>"><i class="bi bi-people me-2"></i> Users</a></li>
         <li><a href="products.php" class="nav-link <?= basename($_SERVER['PHP_SELF'])=='products.php'?'active':'' ?>"><i class="bi bi-box-seam me-2"></i> Products</a></li>
         <li><a href="orders.php" class="nav-link <?= basename($_SERVER['PHP_SELF'])=='orders.php'?'active':'' ?>"><i class="bi bi-receipt me-2"></i> Orders</a></li>
         <li><a href="edit_product.php" class="nav-link <?= basename($_SERVER['PHP_SELF'])=='edit_product.php'?'active':'' ?>"><i class="bi bi-pencil-square me-2"></i> Edit Product</a></li>
-        <li class="mt-4 d-lg-none"><a href="../logout.php" class="btn btn-danger w-100"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+        <li class="mt-4"><a href="../logout.php" class="btn btn-danger w-100"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
     </ul>
 </div>
 

@@ -22,7 +22,7 @@ if (isset($_POST['add_to_cart'])) {
     $_SESSION['cart_added'] = true;
     redirect('wishlist.php');
 }
-
+$titleName = "Wishlist";
 include 'includes/header.php';
 ?>
 

@@ -22,7 +22,7 @@ $total = 0;
 foreach ($cartItems as $item) {
     $total += $item['price'] * $item['quantity'];
 }
-
+$titleName = "Checkout";
 include 'includes/header.php';
 ?>
 

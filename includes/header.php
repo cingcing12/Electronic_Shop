@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>My Shop</title>
+  <title>Electronic_Shop - <?= $titleName ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -678,37 +678,3 @@ window.addEventListener('load', () => {
 </script>
 
 
-<!-- Go to Admin Page Button -->
-<a href="admin/index.php" class="btn-admin-page">
-    <i class='fas fa-shield-alt me-2'></i> Go to Admin
-</a>
-
-<style>
-  .btn-admin-page {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: linear-gradient(135deg, #ff6f61, #ff9472);
-  color: #fff;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 50px;
-  box-shadow: 0 8px 20px rgba(255,111,97,0.6);
-  z-index: 9999;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-}
-
-.btn-admin-page i {
-  font-size: 1.2rem;
-}
-
-.btn-admin-page:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 12px 25px rgba(255,111,97,0.8);
-  background: linear-gradient(135deg, #ff9472, #ff6f61);
-}
-
-</style>

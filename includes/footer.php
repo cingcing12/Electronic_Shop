@@ -29,6 +29,7 @@
           <li><a href="#">Products</a></li>
           <li><a href="#">Wishlist</a></li>
           <li><a href="#">Cart</a></li>
+          <li><a href="admin/index.php">Admin</a></li>
         </ul>
       </div>
 

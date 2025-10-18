@@ -7,7 +7,7 @@ if (!is_logged_in()) {
 
 $user_id = $_SESSION['user_id'];
 $items = get_cart_items($pdo, $user_id);
-
+$titleName = "Cart";
 include 'includes/header.php';
 ?>
 
