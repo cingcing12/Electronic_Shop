@@ -19,6 +19,9 @@
 
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 
+<link rel="icon" type="image/svg+xml" href="image/logo.png">
+
+
 
 
 
@@ -247,16 +250,38 @@
               <i class="fas fa-home me-2"></i> Home
             </a>
           </li>
+         <?php
+$cart_count = 0;
+if (function_exists('is_logged_in') && is_logged_in()) {
+    $stmt = $pdo->prepare("SELECT SUM(quantity) AS cart_count FROM cart_items WHERE user_id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $cart_count = (int)($stmt->fetch(PDO::FETCH_ASSOC)['cart_count'] ?? 0);
+}
+?>
+
+
           <li class="nav-item my-1">
-            <a class="nav-link d-flex align-items-center px-3 py-2 rounded hover-bg-light" href="cart.php">
-              <i class="fas fa-shopping-cart me-2"></i> Cart
-            </a>
-          </li>
-          <li class="nav-item my-1">
-            <a class="nav-link d-flex align-items-center px-3 py-2 rounded hover-bg-light" href="wishlist.php">
-              <i class="fas fa-heart me-2"></i> Wishlist
-            </a>
-          </li>
+  <a class="nav-link d-flex align-items-center px-3 py-2 rounded hover-bg-light" href="cart.php">
+    <i class="fas fa-shopping-cart me-2"></i> Cart 
+    <span id="cartCount" class="badge bg-warning text-dark ms-1"><?= $cart_count ?></span>
+  </a>
+</li>
+
+          <?php
+$wishlist_count = 0;
+if (function_exists('is_logged_in') && is_logged_in()) {
+    $stmt = $pdo->prepare("SELECT COUNT(*) AS wishlist_count FROM wishlist_items WHERE user_id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $wishlist_count = (int)($stmt->fetch(PDO::FETCH_ASSOC)['wishlist_count'] ?? 0);
+}
+?>
+<li class="nav-item my-1">
+  <a class="nav-link d-flex align-items-center px-3 py-2 rounded hover-bg-light" href="wishlist.php">
+    <i class="fas fa-heart me-2"></i> Wishlist
+    <span id="wishlistCount" class="badge bg-danger text-white ms-1"><?= $wishlist_count ?></span>
+  </a>
+</li>
+
 
           <?php if (function_exists('is_logged_in') && is_logged_in()): ?>
             <li class="nav-item my-1">

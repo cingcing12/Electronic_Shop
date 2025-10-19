@@ -57,7 +57,7 @@ $products = $pdo->query("SELECT p.*, c.name as category_name
                     <td class="product-name"><?= htmlspecialchars($p['name']) ?></td>
                     <td class="product-category"><?= htmlspecialchars($p['category_name']) ?></td>
                     <td><span class="fw-bold">$<?= number_format($p['price'],2) ?></span></td>
-                    <td><span class=" bg-gradient-secondary"><?= date('M d, Y', strtotime($p['created_at'])) ?></span></td>
+                    <td><span class="badge text-dark bg-gradient-secondary"><?= date('M d, Y', strtotime($p['created_at'])) ?></span></td>
                     <td class="text-center">
                         <!-- Edit Button -->
                         <button class="btn btn-sm btn-gradient-warning mb-1 btn-edit-product" data-id="<?= $p['id'] ?>" data-bs-toggle="modal" data-bs-target="#editProductModal"><i class="bi bi-pencil-square"></i> Edit</button>

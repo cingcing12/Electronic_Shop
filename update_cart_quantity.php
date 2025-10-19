@@ -24,8 +24,8 @@ if ($quantity < 1) {
     $quantity = 1; // enforce minimum quantity
 }
 
-// Update the cart item in the database
 try {
+    // Update the cart item in the database
     $stmt = $pdo->prepare("UPDATE cart_items SET quantity = :quantity WHERE user_id = :user_id AND product_id = :product_id");
     $stmt->execute([
         ':quantity' => $quantity,
@@ -33,14 +33,20 @@ try {
         ':product_id' => $product_id
     ]);
 
-    // Optionally, check if the row was actually updated:
     if ($stmt->rowCount() === 0) {
-        // No row updated, maybe product not in cart — you could insert it or return error
         echo json_encode(['success' => false, 'error' => 'Product not found in cart']);
         exit;
     }
 
-    echo json_encode(['success' => true]);
+    // Get updated cart count
+    $stmt = $pdo->prepare("SELECT SUM(quantity) AS cart_count FROM cart_items WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $cart_count = (int)($stmt->fetch(PDO::FETCH_ASSOC)['cart_count'] ?? 0);
+
+    echo json_encode([
+        'success' => true,
+        'cart_count' => $cart_count
+    ]);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);

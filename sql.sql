@@ -97,14 +97,14 @@ VALUES
   (
     1,
     'iPhone 15',
-    'Latest Apple iPhone 15 with amazing features',
+    'The Apple iPhone 15 features a durable, aluminum design with a color-infused matte glass back and a Super Retina XDR display that includes the Dynamic Island. Notable upgrades include the A16 Bionic chip, a new 48MP main camera, and the switch to a USB-C port.',
     999.99,
     'https://www.applex.com.bd/cdn/shop/files/iPhone-15-Plus-_3_-8671.jpg?v=1738426440&width=1445'
   ),
   (
     1,
     'Samsung Galaxy S23',
-    'Samsung flagship phone with high performance',
+    'The Samsung Galaxy S23 is a premium Android smartphone released in early 2023, known for its powerful performance and advanced cameras in a compact form factor. It is succeeded by the Samsung Galaxy S24 series, but remains a competitive option due to its strong specs and software support. ',
     899.99,
     'https://m.media-amazon.com/images/I/61yUiD1CVML._UF1000,1000_QL80_.jpg'
   ),
@@ -127,7 +127,7 @@ VALUES
     'AirPods Max',
     `AirPods Max are premium, over-ear wireless headphones from Apple that offer high-fidelity audio and advanced features like Active Noise Cancellation and Spatial Audio. They are built with a premium design, comfort in mind, and use Apple's H1 chip for efficient performance. Key features include custom-built drivers for detailed sound, Adaptive Transparency Mode, and head-tracking for immersive audio.`,
     489.00,
-    'https://arystorephone.com/wp-content/uploads/2021/08/airpods-max-spacegray.jpg'
+    'https://alephksa.com/cdn/shop/files/AirPods_Max_2024_Blue_PDP_Image_Position_1__en-ME_2a3156aa-4e84-4f0c-a7b9-e136244a76b5.jpg?v=1727251520'
   ),
   (
     3,
@@ -139,21 +139,21 @@ VALUES
   (
     4,
     'Gaming Chair',
-    'Ergonomic chair designed for gamers',
+    'When shopping for a gaming chair, consider key features like adjustability, material, and ergonomics, as well as the manufacturer`s reliability. A good gaming chair can help promote a healthy posture during long gaming sessions, reducing discomfort and fatigue. Top brands include Secretlab, Razer, and Herman Miller. ',
     199.99,
     'https://www.greensoul.online/cdn/shop/files/717896796-slide-1_f4bcd7ae-676f-4618-a81e-074a84749005_650x.jpg?v=1756711932'
   ),
   (
     4,
     'PlayStation 5',
-    'Next-gen gaming console with amazing graphics',
+    'The Sony PlayStation 5 is a next-generation gaming console that offers enhanced performance, graphics, and gameplay features compared to its predecessor, the PS4. Key features include lightning-fast loading speeds from an ultra-high-speed SSD, deeper immersion with haptic feedback and adaptive triggers, and support for high-resolution 4K gaming and 3D audio. ',
     499.99,
     'https://www.cnet.com/a/img/resize/05f4f1af2b2243d7dfb1349ab1888878fbf84ceb/hub/2022/10/24/a316fc5e-b8d6-4914-925a-a33170c9abeb/ps5.jpg?auto=webp&fit=crop&height=1200&width=1200'
   ),
   (
     1,
     'MacBook Pro 16"',
-    'Apple MacBook Pro 16-inch with M1 chip',
+    'The MacBook Pro 16-inch is Apple`s flagship laptop, designed for professional users who need top-tier performance, advanced display technology, and extensive battery life. The latest models are equipped with powerful M4 Pro or M4 Max chips and received updates in late 2024. The newest models have also adopted Thunderbolt 5 ports and offer an optional nano-texture display for reduced glare. ',
     2499.99,
     'https://www.shutterstock.com/image-photo/macbook-pro-m2-16inch-apple-600nw-2288025241.jpg'
   ),
@@ -184,7 +184,7 @@ ADD COLUMN icon VARCHAR(100) NULL;
 
 UPDATE categories
 SET
-  icon = 'bi-phone'
+  icon = 'bi-gear-fill'
 WHERE
   id = 1;
 

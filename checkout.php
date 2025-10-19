@@ -106,7 +106,7 @@ document.getElementById("checkoutForm").addEventListener("submit", function(e){
 
   const formData = new FormData(this);
 
-  fetch('process_order.php', { // create process_order.php to handle order placement
+  fetch('process_order.php', {
     method: 'POST',
     body: formData
   })
@@ -121,16 +121,28 @@ document.getElementById("checkoutForm").addEventListener("submit", function(e){
         showConfirmButton: false,
         timer: 5000
       });
+
       // Clear cart summary
-      document.querySelector(".col-md-6:nth-child(2) .card-body").innerHTML = "<p>Your cart is now empty.</p>";
-      // Reset form
-      document.getElementById("checkoutForm").reset();
+      const summaryCard = document.querySelector(".col-md-6:nth-child(2) .card-body");
+      summaryCard.innerHTML = "<p>Your cart is now empty.</p>";
+
+      // Reset checkout form
+      this.reset();
       document.getElementById("cardFields").style.display = "none";
+
+      // Update cart badge in header
+      const cartBadge = document.getElementById("cartCount");
+      if(cartBadge) cartBadge.textContent = "0";
+
     } else {
-      Swal.fire('Error', data.error, 'error');
+      Swal.fire('Error', data.error || 'Something went wrong!', 'error');
     }
+  })
+  .catch(() => {
+    Swal.fire('Error', 'Network error. Please try again.', 'error');
   });
 });
 </script>
+
 
 <?php include 'includes/footer.php'; ?>

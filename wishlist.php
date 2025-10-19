@@ -156,11 +156,11 @@ removeModal.addEventListener('show.bs.modal', function(event) {
 
 // SweetAlert messages
 <?php if(isset($_SESSION['wishlist_removed'])): unset($_SESSION['wishlist_removed']); ?>
-Swal.fire({ icon:'success', title:'Removed from wishlist', position:'top-end', timer:1500, showConfirmButton:false });
+Swal.fire({ icon:'success', title:'Removed from wishlist', timer:1500, showConfirmButton:false });
 <?php endif; ?>
 
 <?php if(isset($_SESSION['cart_added'])): unset($_SESSION['cart_added']); ?>
-Swal.fire({ icon:'success', title:'Added to cart', position:'top-end', timer:1500, showConfirmButton:false });
+Swal.fire({ icon:'success', title:'Added to cart', timer:1500, showConfirmButton:false });
 <?php endif; ?>
 </script>
 
