@@ -44,7 +44,7 @@ $users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC")->fetchAll(P
                     </td>
                     <td><?= htmlspecialchars($u['email']) ?></td>
                     <td>
-                        <span class="badge bg-gradient-secondary">
+                        <span class="badge text-dark bg-gradient-secondary">
                             <?= date('M d, Y', strtotime($u['created_at'])) ?>
                         </span>
                     </td>

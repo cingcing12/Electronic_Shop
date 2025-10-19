@@ -77,8 +77,10 @@ $related_stmt = $pdo->prepare("SELECT * FROM products WHERE category_id=:cat AND
 $related_stmt->execute(['cat'=>$product['category_id'], 'pid'=>$product_id]);
 $related_products = $related_stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$titleName = $product["name"];
 include 'includes/header.php';
 ?>
+
 
 <!-- MAIN PRODUCT -->
 <div class="container my-5">

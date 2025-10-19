@@ -1,6 +1,5 @@
 <?php
 require_once 'init.php';
-include 'includes/header.php';
 
 // Check category
 if (!isset($_GET['category_id'])) die("Category not specified.");
@@ -12,7 +11,8 @@ $cat_stmt->execute(['id' => $category_id]);
 $category_row = $cat_stmt->fetch(PDO::FETCH_ASSOC);
 if (!$category_row) die("Category not found.");
 $category = $category_row['name'];
-
+$titleName = $category;
+include 'includes/header.php';
 // Fetch products
 $stmt = $pdo->prepare("SELECT * FROM products WHERE category_id = :id ORDER BY created_at DESC");
 $stmt->execute(['id' => $category_id]);

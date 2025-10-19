@@ -20,3 +20,7 @@ $stmt = $pdo->prepare("INSERT INTO users (username, email, password_hash, role) 
 $stmt->execute([$username, $email, $hash]);
 
 echo "Admin user created successfully.\n";
+
+// Redirect to login page after successful creation
+header('Location: login.php');
+exit; // Ensure the script stops here
