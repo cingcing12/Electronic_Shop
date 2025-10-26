@@ -456,41 +456,37 @@ if (is_logged_in()) {
     <?php foreach ($products as $p): ?>
       <div class="col-sm-6 col-md-4 col-lg-3 col-6">
         <div class="card border-0 shadow-sm h-100 rounded-4 overflow-hidden position-relative product-card">
-          
+
           <!-- Product Image -->
           <a href="product.php?id=<?= $p['id']; ?>">
             <img src="<?= htmlspecialchars($p['image']); ?>" class="card-img-top product-img" alt="<?= htmlspecialchars($p['name']); ?>">
           </a>
 
-          <!-- Wishlist Heart -->
-          <?php if (is_logged_in()): ?>
-              <?php if (in_array($p['id'], $wishlist_ids)): ?>
-                <!-- Already in wishlist: redirect to wishlist.php -->
-                <a href="wishlist.php" class="wishlist-btn active nav-link" title="Already in Wishlist">❤️</a>
-              <?php else: ?>
-                <!-- Not in wishlist: add to wishlist -->
-                <form method="POST" class="wishlist-form">
-                  <input type="hidden" name="product_id" value="<?= $p['id']; ?>">
-                  <button name="add_to_wishlist" class="wishlist-btn" title="Add to Wishlist">🤍</button>
-                </form>
-              <?php endif; ?>
-          <?php else: ?>
-            <a href="login.php" class="wishlist-btn nav-link" title="Login to add wishlist">🤍</a>
-          <?php endif; ?>
+    <?php if (is_logged_in()): ?>
+    <button 
+        class="wishlist-btn ajax-add-wishlist <?= in_array($p['id'], $wishlist_ids) ? 'active' : '' ?>" 
+        data-id="<?= $p['id']; ?>" 
+        title="<?= in_array($p['id'], $wishlist_ids) ? 'Already in Wishlist' : 'Add to Wishlist'; ?>">
+        <?= in_array($p['id'], $wishlist_ids) ? '❤️' : '🤍'; ?>
+    </button>
+<?php else: ?>
+    <a href="login.php" class="wishlist-btn" title="Login to add wishlist">🤍</a>
+<?php endif; ?>
+
 
           <div class="card-body">
             <h6 class="card-title fw-semibold text-truncate"><?= htmlspecialchars($p['name']); ?></h6>
             <p class="fw-bold text-primary mb-3">$<?= number_format($p['price'], 2); ?></p>
 
-            <!-- Add to Cart -->
+            <!-- Add to Cart Button -->
             <?php if (is_logged_in()): ?>
-              <form method="POST" class="cart-form">
-                <input type="hidden" name="product_id" value="<?= $p['id']; ?>">
-                <div style="width: fit-content;"><button name="add_to_cart" class="btn btn-sm btn-outline-primary w-100 add-cart-btn"><i class="bi bi-cart3"></i> Add to Cart</button></div>
-              </form>
+              <button class="btn btn-sm btn-outline-primary ajax-add-cart" data-id="<?= $p['id']; ?>">
+  <i class="bi bi-cart3"></i> Add to Cart
+</button>
             <?php else: ?>
-              
-              <div style="width: fit-content;"><a href="login.php" class="btn btn-sm btn-outline-primary w-100 add-cart-btn"><i class="bi bi-cart3"></i> Add to Cart</a></div>
+              <a href="login.php" class="btn btn-sm btn-outline-primary w-100 add-cart-btn">
+                <i class="bi bi-cart3"></i> Add to Cart
+              </a>
             <?php endif; ?>
           </div>
         </div>
@@ -499,9 +495,78 @@ if (is_logged_in()) {
   </div>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  function updateCounts(data, btn=null, type=null) {
+    if(data.cart_count !== undefined){
+      const cartElem = document.querySelector('#cartCount');
+      if(cartElem) cartElem.textContent = data.cart_count;
+    }
+    if(data.wishlist_count !== undefined){
+      const wishElem = document.querySelector('#wishlistCount');
+      if(wishElem) wishElem.textContent = data.wishlist_count;
+    }
+
+    // Toggle wishlist heart
+    if(btn && type === 'add_to_wishlist'){
+      if(data.status === 'success'){
+        btn.innerHTML = '❤️';
+        btn.classList.add('active');
+        btn.title = 'Already in Wishlist';
+      } else if(data.status === 'removed'){ 
+        btn.innerHTML = '🤍';
+        btn.classList.remove('active');
+        btn.title = 'Add to Wishlist';
+      }
+    }
+  }
+
+  function handleAjax(btn, actionType){
+    const product_id = btn.dataset.id;
+    fetch('ajax_handler.php', {
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({action: actionType, product_id})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.status === 'login_required'){
+        window.location.href = 'login.php';
+      } else if(data.status === 'success' || data.status === 'removed'){
+        Swal.fire({icon:'success', title:data.message, timer:1500, showConfirmButton:false});
+        updateCounts(data, btn, actionType);
+      } else if(data.status === 'error'){
+        Swal.fire({icon:'error', title:data.message, timer:1500, showConfirmButton:false});
+      }
+    })
+    .catch(()=>{
+      Swal.fire({icon:'error', title:'Something went wrong!', timer:1500, showConfirmButton:false});
+    });
+  }
+
+  // Add to Cart
+  document.querySelectorAll('.ajax-add-cart').forEach(btn=>{
+    btn.addEventListener('click', ()=>handleAjax(btn, 'add_to_cart'));
+  });
+
+  // Add/Remove Wishlist
+  document.querySelectorAll('.ajax-add-wishlist').forEach(btn=>{
+    btn.addEventListener('click', ()=>handleAjax(btn, 'add_to_wishlist'));
+  });
+
+});
+
+</script>
+
+
+
+
 
 <!-- 🌈 Modern Product Card CSS -->
 <style>
+  
 .product-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
@@ -574,6 +639,60 @@ if (is_logged_in()) {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Wishlist Heart Button on Top-Right */
+.wishlist-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  background: white;
+  color: #ff4d6d;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+/* Hover Effect */
+.wishlist-btn:hover {
+  transform: scale(1.2);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+/* Active State */
+.wishlist-btn.active {
+  background: #ffe6ea;
+  color: #ff4d6d;
+}
+
+/* Ensure product card is positioned relatively */
+.product-card {
+  position: relative; /* important for absolute wishlist btn */
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 20px;
+}
+
+/* Product Image Zoom */
+.product-img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.05);
+}
+
 </style>
 
 <!-- 💥 PREMIUM PROMO CTA -->

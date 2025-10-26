@@ -73,7 +73,7 @@ if (isset($_POST['add_to_wishlist']) && is_logged_in()) {
 
 <!-- 🛒 Category Products -->
 <section id="products" class="container my-5">
-  <h2 class="fw-bold mb-5 "><?= htmlspecialchars($category); ?> Products</h2>
+  <h2 class="fw-bold mb-5"><?= htmlspecialchars($category); ?> Products</h2>
 
   <?php if (count($products) > 0): ?>
     <div class="row g-4">
@@ -89,15 +89,11 @@ if (isset($_POST['add_to_wishlist']) && is_logged_in()) {
 
               <!-- Wishlist Button -->
               <?php if (is_logged_in()): ?>
-                  <?php if (in_array($p['id'], $wishlist_ids)): ?>
-                    <!-- Already in wishlist -->
-                    <a href="wishlist.php" class="wishlist-btn active nav-link" title="Already in Wishlist">❤️</a>
-                  <?php else: ?>
-                    <form method="POST" class="wishlist-form">
-                      <input type="hidden" name="product_id" value="<?= $p['id']; ?>">
-                      <button name="add_to_wishlist" class="wishlist-btn" title="Add to Wishlist">🤍</button>
-                    </form>
-                  <?php endif; ?>
+                  <button class="wishlist-btn <?= in_array($p['id'], $wishlist_ids) ? 'active' : '' ?>" 
+                          data-id="<?= $p['id']; ?>" 
+                          title="<?= in_array($p['id'], $wishlist_ids) ? 'Already in Wishlist' : 'Add to Wishlist' ?>">
+                    <?= in_array($p['id'], $wishlist_ids) ? '❤️' : '🤍'; ?>
+                  </button>
               <?php else: ?>
                 <a href="login.php" class="wishlist-btn nav-link" title="Login to add wishlist">🤍</a>
               <?php endif; ?>
@@ -110,12 +106,10 @@ if (isset($_POST['add_to_wishlist']) && is_logged_in()) {
 
               <!-- Add to Cart -->
               <?php if (is_logged_in()): ?>
-                <form method="POST">
-                  <input type="hidden" name="product_id" value="<?= $p['id']; ?>">
-                  <div style="width: fit-content;"><button name="add_to_cart" class="btn btn-sm btn-outline-primary w-100 add-cart-btn">
-                    <i class="bi bi-cart3"></i> Add to Cart
-                  </button></div>
-                </form>
+                <button class="btn btn-sm btn-outline-primary w-100 add-cart-btn" 
+                        data-id="<?= $p['id']; ?>">
+                  <i class="bi bi-cart3"></i> Add to Cart
+                </button>
               <?php else: ?>
                 <a href="login.php" class="btn btn-sm btn-outline-primary w-100">
                   <i class="bi bi-cart3"></i> Add to Cart
@@ -131,6 +125,73 @@ if (isset($_POST['add_to_wishlist']) && is_logged_in()) {
     <p class="text-center text-secondary fs-5">No products found in this category.</p>
   <?php endif; ?>
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // Update counts
+  function updateCartCount(newCount){
+    const el = document.querySelector('#cartCount');
+    if(el) el.textContent = newCount;
+  }
+  function updateWishlistCount(newCount){
+    const el = document.querySelector('#wishlistCount');
+    if(el) el.textContent = newCount;
+  }
+
+  // Add to Cart
+  document.querySelectorAll('.add-cart-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const pid = this.dataset.id;
+      fetch('ajax_handler.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({action:'add_to_cart', product_id:pid})
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status==='login_required'){
+          window.location='login.php';
+        } else if(data.status==='success'){
+          Swal.fire({icon:'success',title:data.message,timer:1500,showConfirmButton:false});
+          updateCartCount(data.cart_count);
+        } else {
+          Swal.fire({icon:'error',title:data.message,timer:1500,showConfirmButton:false});
+        }
+      });
+    });
+  });
+
+  // Add to Wishlist
+  document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const pid = this.dataset.id;
+      fetch('ajax_handler.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({action:'add_to_wishlist', product_id:pid})
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.status==='login_required'){
+          window.location='login.php';
+        } else if(data.status==='success'){
+          Swal.fire({icon:'success',title:data.message,timer:1500,showConfirmButton:false});
+          btn.innerHTML = '❤️';
+          btn.classList.add('active');
+          updateWishlistCount(data.wishlist_count);
+        } else {
+          Swal.fire({icon:'error',title:data.message,timer:1500,showConfirmButton:false});
+        }
+      });
+    });
+  });
+
+});
+</script>
+
+
 
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">

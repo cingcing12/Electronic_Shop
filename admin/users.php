@@ -28,6 +28,7 @@ $users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC")->fetchAll(P
                     <th>ID</th>
                     <th>User</th>
                     <th>Email</th>
+                    <th>Role</th>
                     <th>Created At</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -44,6 +45,11 @@ $users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC")->fetchAll(P
                     </td>
                     <td><?= htmlspecialchars($u['email']) ?></td>
                     <td>
+                        <span class="badge text-dark bg-gradient-warning">
+                            <?= htmlspecialchars(ucfirst($u['role'] ?? 'User')) ?>
+                        </span>
+                    </td>
+                    <td>
                         <span class="badge text-dark bg-gradient-secondary">
                             <?= date('M d, Y', strtotime($u['created_at'])) ?>
                         </span>
@@ -57,7 +63,7 @@ $users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC")->fetchAll(P
                 <?php endforeach; ?>
                 <?php if(count($users) == 0): ?>
                 <tr>
-                    <td colspan="5" class="text-center text-muted py-4">No users found.</td>
+                    <td colspan="6" class="text-center text-muted py-4">No users found.</td>
                 </tr>
                 <?php endif; ?>
             </tbody>
@@ -66,7 +72,7 @@ $users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC")->fetchAll(P
 </div>
 
 <style>
-/* ================= Glass Card + Table ================= */
+/* Glass card + table styles remain the same as before */
 .glass-card {
     background: rgba(255,255,255,0.05);
     backdrop-filter: blur(15px);
@@ -96,7 +102,6 @@ $users = $pdo->query("SELECT * FROM users ORDER BY created_at DESC")->fetchAll(P
 }
 .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,75,43,0.4); }
 
-/* Search input */
 #userSearch { border-radius: 12px; }
 
 /* Responsive tweaks */

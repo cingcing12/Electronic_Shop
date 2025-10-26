@@ -4,9 +4,9 @@ require_once 'includes/header.php';
 // Fetch orders with user info
 $orders = $pdo->query("
     SELECT o.*, u.username 
-    FROM orders o 
-    JOIN users u ON o.user_id=u.id 
-    ORDER BY created_at DESC
+FROM orders o 
+LEFT JOIN users u ON o.user_id=u.id 
+ORDER BY created_at DESC
 ")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
