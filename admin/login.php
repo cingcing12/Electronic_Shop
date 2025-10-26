@@ -2,33 +2,35 @@
 require_once '../init.php';
 $errors = [];
 
-if(isset($_POST['login'])){
+if (isset($_POST['login'])) {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    if(!$username || !$password){
-        $errors[] = "All fields required.";
+    if (empty($username) || empty($password)) {
+        $errors[] = "All fields are required.";
     } else {
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE username=? LIMIT 1");
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? LIMIT 1");
         $stmt->execute([$username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if($user && password_verify($password, $user['password_hash'])){
-            if($user['role'] === 'admin'){
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['user_role'] = 'admin';
+        if ($user && password_verify($password, $user['password_hash'])) {
+            if ($user['role'] === 'admin') {
+                // ✅ Store admin session info
+                $_SESSION['admin_id'] = $user['id'];
+                $_SESSION['admin_username'] = $user['username'];
+
                 header("Location: index.php");
                 exit;
             } else {
                 $errors[] = "Access denied. You are not an admin.";
             }
         } else {
-            $errors[] = "Invalid credentials.";
+            $errors[] = "Invalid username or password.";
         }
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

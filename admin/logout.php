@@ -1,5 +1,9 @@
 <?php
 session_start();
-session_destroy();
+
+// remove only one session variable
+unset($_SESSION['admin_id']);
+
+
 header("Location: login.php");
 exit;

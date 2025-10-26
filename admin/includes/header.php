@@ -1,13 +1,16 @@
 <?php
 // admin_header.php
-require_once __DIR__ . '/../../init.php';
-require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../init.php';
+// require_once __DIR__ . '/../../includes/functions.php';
 
-if (!is_admin_logged_in()) {
+
+// ✅ Directly check if admin is logged in
+if (!isset($_SESSION['admin_id'])) {
     header("Location: login.php");
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,7 +92,7 @@ body { font-family:'Poppins', sans-serif; margin:0; background:#f5f6fa; }
         <li><a href="products.php" class="nav-link <?= basename($_SERVER['PHP_SELF'])=='products.php'?'active':'' ?>"><i class="bi bi-box-seam me-2"></i> Products</a></li>
         <li><a href="orders.php" class="nav-link <?= basename($_SERVER['PHP_SELF'])=='orders.php'?'active':'' ?>"><i class="bi bi-receipt me-2"></i> Orders</a></li>
         <li><a href="edit_product.php" class="nav-link <?= basename($_SERVER['PHP_SELF'])=='edit_product.php'?'active':'' ?>"><i class="bi bi-pencil-square me-2"></i> Add Product</a></li>
-        <li class="mt-4"><a href="../logout.php" class="btn btn-danger w-100"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+        <li class="mt-4"><a href="logout.php" class="btn btn-danger w-100"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
     </ul>
 </div>
 
